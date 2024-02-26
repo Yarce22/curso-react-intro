@@ -1,8 +1,8 @@
-function CreateTodoButton () {
+import '../styles/CreateTodoButton.css'
+
+function CreateTodoButton() {
   return (
-    <button>
-      <span>+</span>
-    </button>
+    <button className="CreateTodoButton" onClick={() => console.log('le diste click')}>+</button>
   );
 }
 
