@@ -3,7 +3,7 @@ import { AppUI } from './AppUI';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 function App() {
-  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
+  const {item: todos, saveItems: saveTodos, loading, error} = useLocalStorage('TODOS_V1', []);
   const [state, setState] = React.useState('');
 
   const completedTodos = todos.filter(todo => !!todo.completed).length;
@@ -32,7 +32,9 @@ function App() {
   }
 
   return (
-    <AppUI 
+    <AppUI
+    loading = {loading}
+    error = {error}
     completedTodos = {completedTodos}
     totalTodos = {totalTodos}
     state = {state}

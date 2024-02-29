@@ -1,21 +1,37 @@
 import React from "react";
 
-const defaultTodos = [
-  {text: 'Agregar tareas', completed: false},
-]
-
-function useLocalStorage(itemName, initialValue) {
-  const localStorageItem = localStorage.getItem(itemName);
-  let parsedItem = JSON.parse(localStorageItem) || defaultTodos;
+function useLocalStorage(itemName, initialValue = []) {
+  const [item, setItem] = React.useState(initialValue);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
   
-  const [item, setItem] = React.useState(parsedItem);
+  React.useEffect(() => {
+    setTimeout(() => {
+      try {
+        const localStorageItem = localStorage.getItem(itemName);
+        let parsedItem = JSON.parse(localStorageItem) || initialValue;
+        setItem(parsedItem);
+  
+        setLoading(false);
+        } catch (error) {
+          setLoading(false);
+          setError(true);
+        }
+    }, 2000);
+  }, [itemName]);
+  
 
   const saveItem = (newItem) => {
     localStorage.setItem(itemName, JSON.stringify(newItem))
     setItem(newItem);
   };
 
-  return [item, saveItem];
+  return {
+    item,
+    saveItem,
+    loading,
+    error
+  };
 }
 
 export { useLocalStorage };
