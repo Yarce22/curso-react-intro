@@ -10,17 +10,41 @@ const defaultTodos = [
 ]
 
 function App() {
-  const [todos, setTodos] = React.useState(defaultTodos);
+  const localStorageTodos = localStorage.getItem('TODOS_V1');
+  let parsedTodos = JSON.parse(localStorageTodos) || defaultTodos;
+
+  const [todos, setTodos] = React.useState(parsedTodos);
   const [state, setState] = React.useState('');
 
   const completedTodos = todos.filter(todo => !!todo.completed).length;
   const totalTodos = todos.length;
 
-  console.log([todos]);
-
   const searchedTodos = todos.filter((todo) => {
     return todo.text.toLowerCase().includes(state.toLowerCase());
-  })
+  });
+
+  const saveTodos = (newTodos) => {
+    localStorage.setItem('TODOS_V1', JSON.stringify(newTodos))
+    setTodos(newTodos);
+  };
+
+  const completeTodo = (text) => {
+    const newTodos = [...todos];
+    const todoIndex = newTodos.findIndex(
+      (todo) => todo.text === text
+    );
+    newTodos[todoIndex].completed = !newTodos[todoIndex].completed;
+    saveTodos(newTodos);
+  }
+
+  const deleteTodo = (text) => {
+    const newTodos = [...todos];
+    const todoIndex = newTodos.findIndex(
+      (todo) => todo.text === text
+    );
+    newTodos.splice(todoIndex, 1);
+    saveTodos(newTodos);
+  }
 
   return (
     <React.Fragment>
@@ -39,6 +63,8 @@ function App() {
           key={todo.text} 
           text={todo.text}
           completed={todo.completed}
+          onComplete={() => completeTodo(todo.text)}
+          onDelete={deleteTodo}
           />
         ))}
       </TodoList>
