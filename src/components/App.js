@@ -9,11 +9,22 @@ const defaultTodos = [
   {text: 'Agregar tareas', completed: false},
 ]
 
-function App() {
-  const localStorageTodos = localStorage.getItem('TODOS_V1');
-  let parsedTodos = JSON.parse(localStorageTodos) || defaultTodos;
+function useLocalStorage(itemName, initialValue) {
+  const localStorageItem = localStorage.getItem(itemName);
+  let parsedItem = JSON.parse(localStorageItem) || defaultTodos;
+  
+  const [item, setItem] = React.useState(parsedItem);
 
-  const [todos, setTodos] = React.useState(parsedTodos);
+  const saveItem = (newItem) => {
+    localStorage.setItem(itemName, JSON.stringify(newItem))
+    setItem(newItem);
+  };
+
+  return [item, saveItem];
+}
+
+function App() {
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
   const [state, setState] = React.useState('');
 
   const completedTodos = todos.filter(todo => !!todo.completed).length;
@@ -22,11 +33,6 @@ function App() {
   const searchedTodos = todos.filter((todo) => {
     return todo.text.toLowerCase().includes(state.toLowerCase());
   });
-
-  const saveTodos = (newTodos) => {
-    localStorage.setItem('TODOS_V1', JSON.stringify(newTodos))
-    setTodos(newTodos);
-  };
 
   const completeTodo = (text) => {
     const newTodos = [...todos];
