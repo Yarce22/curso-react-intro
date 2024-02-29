@@ -1,9 +1,5 @@
 import React from 'react';
-import TodoCounter from './TodoCounter';
-import { TodoSearch } from './TodoSearch';
-import { TodoList } from './TodoList';
-import { TodoItem } from './TodoItem';
-import { CreateTodoButton } from './CreateTodoButton';
+import { AppUI } from './AppUI';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 function App() {
@@ -36,30 +32,15 @@ function App() {
   }
 
   return (
-    <React.Fragment>
-      <TodoCounter
-        completed={completedTodos}
-        total={totalTodos}
-      />
-      <TodoSearch 
-        state={state}
-        setState={setState}
-      />
-
-      <TodoList>
-        {searchedTodos.map((todo) => (
-          <TodoItem
-          key={todo.text} 
-          text={todo.text}
-          completed={todo.completed}
-          onComplete={() => completeTodo(todo.text)}
-          onDelete={deleteTodo}
-          />
-        ))}
-      </TodoList>
-      
-      <CreateTodoButton />
-    </React.Fragment>
+    <AppUI 
+    completedTodos = {completedTodos}
+    totalTodos = {totalTodos}
+    state = {state}
+    setState = {setState}
+    searchedTodos = {searchedTodos}
+    completeTodo = {completeTodo}
+    deleteTodo = {deleteTodo}
+    />
   );
 }
 
