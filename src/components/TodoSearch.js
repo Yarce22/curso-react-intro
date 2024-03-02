@@ -1,10 +1,12 @@
 import React from 'react';
 import '../styles/TodoSearch.css';
+import { TodoContext } from './TodoConext';
 
-function TodoSearch({
-  state,
-  setState,
-}) {
+function TodoSearch() {
+  const {
+    state,
+    setState,
+  } = React.useContext(TodoContext);
   return (
     <input
       placeholder="Search"
